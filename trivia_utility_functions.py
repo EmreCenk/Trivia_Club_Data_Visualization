@@ -83,13 +83,32 @@ def histogram_of_points(a, exclude=None):
     plt.ylabel("Number of people")
     plt.show()
 
-# def plot_personal_progress():
-#
+def plot_personal_progress(a):
+    plots = {} #{"name": [ [x1,x2], [y1, y2] ], "name2": [[...] ... ], ... }
+    for week_number, week in enumerate(loop_through_weeks(a)):
+        date = week.pop(0)
+        for name, points in week:
+            try: points = int(points)
+            except: continue
+
+            if name in plots:
+                plots[name][0].append(points)
+                plots[name][1].append(week_number)
+            else:
+                plots[name] = [[points], [week_number]]
+
+    for person in plots:
+        xs, ys = plots[person]
+        plt.plot(ys, xs, label = person)
+
+    plt.legend()
+    plt.show()
+
 
 
 if __name__ == '__main__':
     with open("results.txt", "r") as file:
         a = file.read()
 
-    for k in loop_through_weeks(a): print(k, "\n")
+    plot_personal_progress(a)
     # histogram_of_points(a, exclude = ["Ali"])
