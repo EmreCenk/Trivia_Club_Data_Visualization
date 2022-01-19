@@ -98,11 +98,15 @@ def plot_personal_progress(a):
                 plots[name] = [[points], [week_number]]
 
     for person in plots:
+
         xs, ys = plots[person]
         plt.plot(ys, xs, label = person)
+        plt.scatter(ys, xs)
+        plt.xlabel("week number")
+        plt.ylabel("number of points")
+        plt.legend()
+        plt.show()
 
-    plt.legend()
-    plt.show()
 
 
 
