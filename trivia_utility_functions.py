@@ -41,10 +41,21 @@ def trivia_copy(a, countdown = True, time_between_name_reveals = 1):
         print(str(i + 1) + ".\t" + sorted_names[i] + "\t" + str(round(nums[sorted_names[i]]/occurences[sorted_names[i]], 2)))
         sleep(time_between_name_reveals)
 
-def histogram_of_points(a, exclude = "Ali"):
+def histogram_of_points(a, exclude=None):
+    """
+    Generates a histogram of points per game distribution
+    :param a: file to read from
+    :param exclude: list of people to exclude
+    :return:
+    """
+    if exclude is None:
+        exclude = []
+
     sorted_names, points, occurences = process_points(a)
     sorted_names.remove(exclude)
-    points["Ali"] = 0
+    for person in exclude:
+        if person in points: points[person] = 0
+
     point_values = [points[x]/occurences[x] for x in points]
     num_bins = 7
     n, bins, patches = plt.hist(point_values, num_bins, facecolor='blue', alpha=0.5)
@@ -58,4 +69,4 @@ if __name__ == '__main__':
     with open("results.txt", "r") as file:
         a = file.read()
 
-    histogram_of_points(a)
+    histogram_of_points(a, exclude = ["Ali"])
