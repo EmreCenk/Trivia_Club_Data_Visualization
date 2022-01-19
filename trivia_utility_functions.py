@@ -1,6 +1,26 @@
 from time import sleep
 import matplotlib.pyplot as plt
 
+def loop_through_weeks(a):
+    a = a.split("\n")
+    current_week = []
+    months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+    for i in range(len(a)):
+        b = a[i].split("\t")
+
+        if len(b[0].split(" ")) > 4: continue
+        b_0 = b[0].lower()
+        inmonth = False
+        for month in months:
+            if month in b_0:
+                if len(current_week) == 0: continue
+                yield current_week
+                current_week = []
+                inmonth = True
+                break
+        if inmonth: current_week.append(b)
+        if "team" in b[0].lower() or len(b) <= 1: continue
+        current_week.append(b)
 def process_points(a):
     a = a.split("\n")
     nums = {}
@@ -63,10 +83,13 @@ def histogram_of_points(a, exclude=None):
     plt.ylabel("Number of people")
     plt.show()
 
+# def plot_personal_progress():
+#
 
 
 if __name__ == '__main__':
     with open("results.txt", "r") as file:
         a = file.read()
 
-    histogram_of_points(a, exclude = ["Ali"])
+    for k in loop_through_weeks(a): print(k, "\n")
+    # histogram_of_points(a, exclude = ["Ali"])
