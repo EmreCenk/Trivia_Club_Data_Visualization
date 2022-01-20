@@ -18,8 +18,11 @@ def loop_through_weeks(a):
                 current_week = []
                 inmonth = True
                 break
-        if inmonth: current_week.append(b)
-        if "team" in b[0].lower() or len(b) <= 1: continue
+        if inmonth:
+            current_week.append(b)
+            continue
+        if "team" in b[0].lower() or b[0] == "": continue
+        # if len(b) <= 1: continue
         current_week.append(b)
 def process_points(a):
     a = a.split("\n")
@@ -107,12 +110,29 @@ def plot_personal_progress(a):
         plt.legend()
         plt.show()
 
+def total_points_per_week_over_time(a):
+    xs, ys, labels = [], [], []
+    for week_number, week in enumerate(loop_through_weeks(a)):
+        week.pop(0)
+        if len(week) == 0: continue
+        total = 0
+        for w in week:
+            if len(w) <= 1: continue
+            name, score = w
+            if "team" in name: continue
+            try: total += int(score)
+            except: pass
 
+        xs.append(week_number)
+        ys.append(total)
+        plt.text(week_number, total, total)
+    plt.plot(xs, ys)
+    plt.show()
 
 
 if __name__ == '__main__':
     with open("results.txt", "r") as file:
         a = file.read()
-
-    plot_personal_progress(a)
+    total_points_per_week_over_time(a)
+    # plot_personal_progress(a)
     # histogram_of_points(a, exclude = ["Ali"])
